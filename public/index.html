@@ -5,23 +5,13 @@
 		<title>Chat App</title>
 	</head>
 		<body>
-		<div class="messages">
-			<!-- Show messeges in this div -->
-		</div>
+		<h1>Join the chat</h1>
 
-		<form id="message-form">
-			Send a messge: <br>
-			<input type="text" name="message" placeholder="Enter message here..."/><br>
-			<input type="submit" value="Submit">
+		<form action="/chat.html">
+			<label>Display name:</label>
+			<input type="text" name="name" placeholder="Type in your username..."/><br>
+			<input type="submit" value="Get me in!"/>
+
 		</form>
-
-
-			<script src="/js/jquery-2.2.4.min.js"></script>
-			<script src="/js/socket.io-1.4.5.js"></script>
-			<script src="/js/moment.js"></script>
-			<script src="/js/QueryParams.js"></script>
-			<script src="/js/app.js"></script>
-
-
 		</body>
 </html>
