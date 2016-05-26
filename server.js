@@ -10,23 +10,46 @@ app.use(express.static(__dirname + '/public'));
 
 var clientInfo = {};
 
-io.on('connection', function (socket) {
+function getCurrentUsers (socket) {
+	var info = clientInfo[socket.id];
+	var users = [];
+
+	if(typeof info === 'undefined'){
+		return;
+	}
+
+	Object.keys(clientInfo).forEach(function (socketId) {
+		var userInfo = clientInfo[socketId];
+	
+		if(info.room === userInfo.room) {
+			users.push(userInfo.name);
+		}
+	});
+
+	socket.emit('msg', {
+		name: 'System',
+		text: 'Current users: ' + users.join(', '),
+		timeStamp: moment().valueOf()
+	});
+};
+
+io.on('connection', function(socket) {
 	console.log('Connection established');
 
-	socket.on('joinRoom', function (req) {
+	socket.on('joinRoom', function(req) {
 		socket.join(req.room);
 		clientInfo[socket.id] = req;
-		socket.broadcast.to(req.room).emit('msg',{
+		socket.broadcast.to(req.room).emit('msg', {
 			name: 'System',
 			text: req.name + ' joined',
 			timeStamp: moment().valueOf()
 		});
 	});
 
-	socket.on('disconnect', function () {
+	socket.on('disconnect', function() {
 		var userData = clientInfo[socket.id];
 
-		if(typeof userData !== 'undefined'){
+		if (typeof userData !== 'undefined') {
 			socket.leave(userData.room);
 			io.to(userData.room).emit('msg', {
 				name: 'System',
@@ -37,12 +60,17 @@ io.on('connection', function (socket) {
 		}
 	});
 
-	socket.on('msg', function (message) {
+	socket.on('msg', function(message) {
 		console.log('Message recived: ' + message.text);
 
-		message.timeStamp = moment().valueOf();
-		io.to(clientInfo[socket.id].room).emit('msg', message);
-		//socket.broadcast.emit('msg', message);
+		if (message.text === '@currentusers') {
+			getCurrentUsers(socket);
+		} else {
+			message.timeStamp = moment().valueOf();
+			io.to(clientInfo[socket.id].room).emit('msg', message);
+				//socket.broadcast.emit('msg', message);
+		}
+
 	});
 
 	socket.emit('msg', {
@@ -52,6 +80,6 @@ io.on('connection', function (socket) {
 	});
 });
 
-http.listen(PORT, function () {
+http.listen(PORT, function() {
 	console.log('Server listening on port ' + PORT);
 });
