@@ -8,7 +8,7 @@ var socket = io();
 // 	preload: true
 // });
 var username = getQueryVariable('name') || 'Anonymous';
-var room = getQueryVariable('room');
+var room = getQueryVariable('room') || 'main';
 
 var $roomname = jQuery('.room-name');
 $roomname.text('Welcome to ' + room + ' chat room');

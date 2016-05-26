@@ -39,6 +39,7 @@ io.on('connection', function(socket) {
 	console.log('Connection established');
 
 	socket.on('joinRoom', function(req) {
+
 		socket.join(req.room);
 		clientInfo[socket.id] = req;
 		socket.broadcast.to(req.room).emit('msg', {
