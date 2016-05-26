@@ -23,6 +23,20 @@ io.on('connection', function (socket) {
 		});
 	});
 
+	socket.on('disconnect', function () {
+		var userData = clientInfo[socket.id];
+
+		if(typeof userData !== 'undefined'){
+			socket.leave(userData.room);
+			io.to(userData.room).emit('msg', {
+				name: 'System',
+				text: userData.name + ' left the chat!',
+				timeStamp: moment().valueOf()
+			});
+			delete userData;
+		}
+	});
+
 	socket.on('msg', function (message) {
 		console.log('Message recived: ' + message.text);
 
