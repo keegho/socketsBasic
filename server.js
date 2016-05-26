@@ -10,6 +10,7 @@ app.use(express.static(__dirname + '/public'));
 
 var clientInfo = {};
 
+// Send current users in chat
 function getCurrentUsers (socket) {
 	var info = clientInfo[socket.id];
 	var users = [];
@@ -31,6 +32,7 @@ function getCurrentUsers (socket) {
 		text: 'Current users: ' + users.join(', '),
 		timeStamp: moment().valueOf()
 	});
+	users = [];
 };
 
 io.on('connection', function(socket) {
@@ -56,7 +58,8 @@ io.on('connection', function(socket) {
 				text: userData.name + ' left the chat!',
 				timeStamp: moment().valueOf()
 			});
-			delete userData;
+			//delete userData;
+			delete clientInfo[socket.id];
 		}
 	});
 
