@@ -1,13 +1,18 @@
-.vertical-center{
+.vertical-center {
 	min-height: 100vh;
 	margin: 0;
 	display: flex;
 	align-items: center;
 }
 
-.vertical-center-chat{
+.vertical-center-chat {
 	min-height: 100vh;
 	margin: 0;
 	display: flex;
 	
+}
+.scrolling-div {
+	overflow-y: scroll;
+	height: 400px;
+	width: auto;
 }

@@ -26,8 +26,12 @@ socket.on('msg', function(message) {
 	var momentTimeStamp = moment.utc(message.timeStamp);
 	var $msg = jQuery('.messages');
 
-	console.log(message.text);
-	$msg.append('<p><strong>' + message.name + ': </strong> ' + message.text + '     <i>' + momentTimeStamp.local().format('h:mm a') + '</i></p>');
+	if(message.name === 'System'){
+		$msg.append('<p style="color:red"><strong>' + message.name + ': </strong> ' + message.text + '    &nbsp <i>' + momentTimeStamp.local().format(' h:mm a') + '  </i><i class="glyphicon glyphicon-time"></i></p>');
+	} else {
+		$msg.append('<p><strong>' + message.name + ': </strong> ' + message.text + '    &nbsp <i>' + momentTimeStamp.local().format(' h:mm a') + '  </i><i class="glyphicon glyphicon-time"></i></p>');
+	}
+	
 	//sound.play('bell_ring');
 });
 
