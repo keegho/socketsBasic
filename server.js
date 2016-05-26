@@ -8,14 +8,26 @@ var io = require('socket.io')(http);
 
 app.use(express.static(__dirname + '/public'));
 
+var clientInfo = {};
+
 io.on('connection', function (socket) {
 	console.log('Connection established');
+
+	socket.on('joinRoom', function (req) {
+		socket.join(req.room);
+		clientInfo[socket.id] = req;
+		socket.broadcast.to(req.room).emit('msg',{
+			name: 'System',
+			text: req.name + ' joined',
+			timeStamp: moment().valueOf()
+		});
+	});
 
 	socket.on('msg', function (message) {
 		console.log('Message recived: ' + message.text);
 
 		message.timeStamp = moment().valueOf();
-		io.emit('msg', message);
+		io.to(clientInfo[socket.id].room).emit('msg', message);
 		//socket.broadcast.emit('msg', message);
 	});
 

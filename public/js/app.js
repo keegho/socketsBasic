@@ -1,10 +1,18 @@
 var socket = io();
 
-var name = getQueryVariable('name') || 'Anonymous';
+var username = getQueryVariable('name') || 'Anonymous';
 var room = getQueryVariable('room');
+
+var $roomname = jQuery('.room-name');
+$roomname.text('Welcome to ' + room + ' chat room');
+
 
 socket.on('connect', function () {
 	console.log('Connection established with server...');
+	socket.emit('joinRoom', {
+		name: username,
+		room: room
+	});
 });
 
 socket.on('msg', function (message) {
@@ -24,7 +32,7 @@ $form.on('submit', function (event) {
 	var $message = $form.find('input[name=message]');
 
 	socket.emit('msg', {
-		name: name,
+		name: username,
 		text: $message.val()
 	});
 	$message.val('');
