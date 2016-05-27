@@ -16,3 +16,11 @@
 	height: 400px;
 	width: auto;
 }
+
+h1 {
+	margin: 24px 0;
+}
+
+.container {
+	margin-top: 30px;
+}
