@@ -1,4 +1,5 @@
 # socketsBasic Chat App
+Author: Kegham Karsian
 
 This is a simple chat app using socket.io
 
